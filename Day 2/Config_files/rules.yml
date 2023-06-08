@@ -1,0 +1,19 @@
+  groups:
+    - name: Node-Exporter
+      rules:
+        - record: cpu:seconds 
+          expr: node_cpu_seconds_total{mode="idle",team='database'}
+    - name: NodeJS-app
+      rules:
+        - record: node:up
+          expr: up{job="NodeJS - Client Libraray"}
+        - alert: NodeJS-app-down-alert
+          expr: node:up == 0
+          for: 10s
+    - name: low-space-check-rule
+      rules:
+      - alert: LowDiskSpace
+        expr: 100 * node_filesystem_free_bytes{job="Node Exporter"} / node_filesystem_size_bytes{job="Node Exporter"} > 10
+        labels:
+          severity: warning
+          environment: prod

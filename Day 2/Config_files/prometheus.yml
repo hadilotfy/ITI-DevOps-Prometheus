@@ -9,10 +9,11 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-          # - alertmanager:9093
+           - localhost:9093
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
 rule_files:
+  - rules.yml
   # - "first_rules.yml"
   # - "second_rules.yml"
 
@@ -20,14 +21,14 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: "prometheus"
+  - job_name: "Prometheus"
 
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
 
     static_configs:
       - targets: ["localhost:9090"]
-  - job_name: "prometheus-ec2-node-exporter"
+  - job_name: "Node Exporter"
     scheme: https
     tls_config:
       ca_file: /etc/prometheus/node_exporter.crt
@@ -60,6 +61,16 @@ scrape_configs:
         password: theus
     ec2_sd_configs:
       - region: us-east-1
-        access_key: AKIAVTRT3SNRCUGYAZRY
-        secret_key: 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
+        access_key: AKIAV---------
+        secret_key: 2CjvB---------
         port: 9100
+  - job_name: "Docker-Daemon"
+    static_configs:
+      - targets: ["localhost:9898"]
+  - job_name: "Docker Containers - CAdvisor"
+    static_configs:
+      - targets: ["localhost:8080"]
+  - job_name: "NodeJS - Client Libraray"
+    static_configs:
+      - targets: ["localhost:8000"]
+
